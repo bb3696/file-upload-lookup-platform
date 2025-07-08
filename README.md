@@ -37,7 +37,7 @@ A full-stack platform for uploading file metadata and querying it via a user-fri
 
 ## 📦 Project Structure (Backend)
 
-\`\`\`bash
+```bash
 src/
 ├── main/
 │   ├── java/com/tonyyang/fileuploadlookup/
@@ -46,7 +46,7 @@ src/
 │   │   └── model/               # Data models
 │   └── resources/
 │       └── application.properties
-\`\`\`
+```
 
 ---
 
@@ -55,17 +55,17 @@ src/
 ### Prerequisites
 
 - JDK 17+
-- AWS credentials in \`~/.aws/credentials\` or EC2 IAM role
+- AWS credentials in `~/.aws/credentials` or EC2 IAM role
 - Maven
 
 ### Run locally
 
-\`\`\`bash
+```bash
 ./mvnw spring-boot:run
-\`\`\`
+```
 
 Spring Boot app will be available at:  
-\`http://localhost:8080\`
+`http://localhost:8080`
 
 ---
 
@@ -73,38 +73,38 @@ Spring Boot app will be available at:
 
 ### Upload metadata
 
-\`\`\`http
+```http
 POST /upload-metadata
 Content-Type: application/json
-\`\`\`
+```
 
 **Example request:**
 
-\`\`\`json
+```json
 {
   "filename": "example.pdf",
   "uploadTime": "2025-07-08T12:00:00Z",
   "s3Url": "https://your-bucket.s3.amazonaws.com/example.pdf"
 }
-\`\`\`
+```
 
 ---
 
 ### Query metadata
 
-\`\`\`http
+```http
 GET /files?filename=example.pdf
-\`\`\`
+```
 
 **Example response:**
 
-\`\`\`json
+```json
 {
   "filename": "example.pdf",
   "uploadTime": "2025-07-08T12:00:00Z",
   "s3Url": "https://your-bucket.s3.amazonaws.com/example.pdf"
 }
-\`\`\`
+```
 
 ---
 
