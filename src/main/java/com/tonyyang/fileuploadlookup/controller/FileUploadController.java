@@ -4,6 +4,10 @@ package com.tonyyang.fileuploadlookup.controller;
 import com.tonyyang.fileuploadlookup.model.FileMetadata;
 import com.tonyyang.fileuploadlookup.service.FileMetadataService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import org.springframework.http.MediaType;
 
 @RestController
 @RequestMapping("/api/files") //定义所有接口以 /api/files 开头
@@ -18,11 +22,21 @@ public class FileUploadController {
         this.fileMetadataService = fileMetadataService;
     }
 
-    @PostMapping("/upload") //接口路径是 POST /api/files/upload
+    //👉 上传元数据接口（前端通过 JSON 发 metadata）
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public String uploadFileAndMetadata(@RequestParam("file") MultipartFile file) throws IOException {
+        String s3Url = fileMetadataService.uploadFileToS3(file);
 
-    public String uploadFileMetadata(@RequestBody FileMetadata fileMetadata) {  //自动把前端传来的 JSON 解析成对象
-        fileMetadataService.saveFileMetadata(fileMetadata);
-        return "File metadata saved successfully";
+        FileMetadata metadata = new FileMetadata();
+        metadata.setFilename(file.getOriginalFilename());
+        metadata.setUploadTime(java.time.Instant.now().toString());
+        metadata.setS3Url(s3Url);
+
+        fileMetadataService.saveFileMetadata(metadata);
+        return "Uploaded and metadata saved";
     }
+
+
+
 
 }
